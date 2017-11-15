@@ -1,7 +1,7 @@
 <?php
 
 /* 
-Copyright 2014-2016 Sigbert Klinke (sigbert.klinke@web.de)
+Copyright 2014-2017 Sigbert Klinke (sigbert.klinke@web.de)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,40 +22,31 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['parserhook'][] = array(
 	'name' => 'iframe',
-	'version' => '0.01',
+	'version' => '0.02',
 	'description' => 'frame allowed sites in an iframe, derived from [http://www.mediawiki.org/wiki/Extension:IDisplay iDisplay] extension',
 	'author' => 'Sigbert Klinke'
 );
 # Define a setup function
 $wgHooks['ParserFirstCallInit'][] = 'iframe_Setup';
-# Add a hook to initialise the magic word
-$wgHooks['LanguageGetMagic'][]    = 'iframe_Magic';
 # Allowed URLs
-$wgIframeUrl = array ('rstudio' => 'http://shiny.rstudio.com/',
-                      'mmstat'  => 'http://141.20.100.251/mmstat_en/');
+$wgIframeUrl = array ('rstudio'    => 'http://shiny.rstudio.com/',
+                      'mars'       => 'http://mars.wiwi.hu-berlin.de:3838/',
+                      'wiwi'       => 'http://shinyapps.wiwi.hu-berlin.de/');
 
 function iframe_Setup( &$parser ) {
   # Set a function hook associating the magic word with our function
-  $parser->setFunctionHook( 'iframe', 'iframe_Render' );
+  $parser->setHook( 'iframe', 'iframe_Render' );
   return true;
 }
 
-function iframe_Magic( &$magicWords, $langCode ) {
-  # Add the magic word
-  # The first array element is whether to be case sensitive, in this case (0) it is not case sensitive, 1 would be sensitive
-  # All remaining elements are synonyms for our parser function
-  $magicWords['iframe'] = array( 0, 'iframe');
-  # unless we return true, other parser functions extensions won't get loaded.
-  return true;
-}
-
-function iframe_Render ($parser, $k='', $p='', $w='', $h='') {
+function iframe_Render ($input, array $args, Parser $parser, PPFrame $frame) {
   global $wgIframeUrl;
-  $width  = (empty($w)? 800 : $w);      
-  $height = (empty($h)? 600 : $h); 
-  $key    = (empty($k)? 'rstudio' : $k); 
+  $width  = (array_key_exists('w', $args) ? $args['w'] : 800);      
+  $height = (array_key_exists('h', $args) ? $args['h'] : 600); 
+  $key    = (array_key_exists('k', $args) ? $args['k'] : 'rstudio'); 
+  $page   = (array_key_exists('p', $args) ? $args['p'] : ''); 
   $url    = $wgIframeUrl[$key];
-  $page   = parse_url ($p);
+  $page   = parse_url ($page);
   if (empty($url)) {
     $output = '<table width="'. $width .'"><tr align="left"><th>Possible key(s)</th><th>URL(s)</th></tr>';
     foreach ($wgIframeUrl as $key => $value) {
@@ -63,7 +54,14 @@ function iframe_Render ($parser, $k='', $p='', $w='', $h='') {
     }
     $output .= '</table>';
   } else {
-    $output = '<iframe src="'. $url . $page['path'] . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
+    $furl = $url . $page['path'];
+    if (array_key_exists('query', $page)) {
+      parse_str($page['query'], $queries);
+      $qarr = array();
+      foreach ($queries as $key => $value) array_push($qarr, htmlentities($key) . '=' . htmlentities($value));
+      $furl .= '?' . implode('&', $qarr);
+    }
+    $output = '<iframe src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
   }
   return array( $output, 'noparse' => true, 'isHTML' => true );	    
 }
