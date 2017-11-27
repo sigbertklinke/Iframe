@@ -31,7 +31,7 @@ $wgHooks['ParserFirstCallInit'][] = 'iframe_Setup';
 # Allowed URLs
 $wgIframeUrl = array ('rstudio'    => 'http://shiny.rstudio.com/',
                       'mars'       => 'http://mars.wiwi.hu-berlin.de:3838/',
-                      'wiwi'       => 'http://shinyapps.wiwi.hu-berlin.de/');
+                      'wiwi'       => 'https://shinyapps.wiwi.hu-berlin.de/');
 
 function iframe_Setup( &$parser ) {
   # Set a function hook associating the magic word with our function
