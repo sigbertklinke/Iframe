@@ -22,16 +22,17 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 $wgExtensionCredits['parserhook'][] = array(
 	'name' => 'iframe',
-	'version' => '0.02',
-	'description' => 'frame allowed sites in an iframe, derived from [http://www.mediawiki.org/wiki/Extension:IDisplay iDisplay] extension',
+	'version' => '0.03',
+	'description' => 'embeds external webpages in an wiki with an iframe, derived from [http://www.mediawiki.org/wiki/Extension:IDisplay iDisplay] extension',
 	'author' => 'Sigbert Klinke'
 );
 # Define a setup function
 $wgHooks['ParserFirstCallInit'][] = 'iframe_Setup';
 # Allowed URLs
-$wgIframeUrl = array ('rstudio'    => 'http://shiny.rstudio.com/',
-                      'mars'       => 'http://mars.wiwi.hu-berlin.de:3838/',
-                      'wiwi'       => 'https://shinyapps.wiwi.hu-berlin.de/');
+$wgIframeUrl = array ('rstudio'    => array('scheme' =>'http',  'domain' => 'shiny.rstudio.com'),
+                      'shinyapps'  => array('scheme' =>'http',  'domain' => 'shinyapps.io'),
+                      'mars'       => array('scheme' =>'http',  'domain' => 'mars.wiwi.hu-berlin.de:3838'),
+                      'wiwi'       => array('scheme' =>'https', 'domain' => 'shinyapps.wiwi.hu-berlin.de');
 
 function iframe_Setup( &$parser ) {
   # Set a function hook associating the magic word with our function
@@ -41,11 +42,13 @@ function iframe_Setup( &$parser ) {
 
 function iframe_Render ($input, array $args, Parser $parser, PPFrame $frame) {
   global $wgIframeUrl;
-  $width  = (array_key_exists('w', $args) ? $args['w'] : 800);      
-  $height = (array_key_exists('h', $args) ? $args['h'] : 600); 
-  $key    = (array_key_exists('k', $args) ? $args['k'] : 'rstudio'); 
-  $page   = (array_key_exists('p', $args) ? $args['p'] : ''); 
-  $url    = $wgIframeUrl[$key];
+  $width  = (array_key_exists('w',  $args) ? $args['w']  : 800);      
+  $height = (array_key_exists('h',  $args) ? $args['h']  : 600); 
+  $key    = (array_key_exists('k',  $args) ? $args['k']  : 'rstudio'); 
+  $phost  = (array_key_exists('l', $args)  ? $args['l']  : ''); 
+  if (!empty($phost)) $phost .= '.';
+  $page   = (array_key_exists('p',  $args) ? $args['p']  : ''); 
+  $url    = $wgIframeUrl[$key]['scheme'] . '://' . $phost .  $wgIframeUrl[$key]['domain'] . '/';
   $page   = parse_url ($page);
   if (empty($url)) {
     $output = '<table width="'. $width .'"><tr align="left"><th>Possible key(s)</th><th>URL(s)</th></tr>';
