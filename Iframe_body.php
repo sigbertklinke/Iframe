@@ -27,8 +27,10 @@ class Iframe {
    */
   public static function setHooks( Parser $parser ) {
     global $wgIframe;
-    $wgIframe = array ('local'      => array('scheme' =>'http',  'domain' => 'localhost:3838'),
-                       'locals'     => array('scheme' =>'https', 'domain' => 'localhost:3838'),
+    $wgIframe = array ('local'      => array('scheme' =>'http',  'domain' => 'localhost'),
+                       'locals'     => array('scheme' =>'https', 'domain' => 'localhost'),
+                       'shiny'      => array('scheme' =>'http',  'domain' => 'localhost:3838'),
+                       'shinys'     => array('scheme' =>'https', 'domain' => 'localhost:3838'),
                        'rstudio'    => array('scheme' =>'http',  'domain' => 'shiny.rstudio.com'),
                        'shinyapps'  => array('scheme' =>'http',  'domain' => 'shinyapps.io'),
                        'mars'       => array('scheme' =>'http',  'domain' => 'mars.wiwi.hu-berlin.de:3838'),
