@@ -34,8 +34,8 @@ class Iframe {
                        'mars'       => array('scheme' =>'http',  'domain' => 'mars.wiwi.hu-berlin.de:3838'),
                        'wiwi'       => array('scheme' =>'https', 'domain' => 'shinyapps.wiwi.hu-berlin.de')
                        );
-    $parser->extIframe = new self();
-    $parser->setHook( 'iframe', [ $parser->extIframe, 'iframe' ] );
+ #   $parser->extIframe = new self();
+    $parser->setHook( 'iframe', 'Iframe::renderIframe' );
     return true;
   }
 
@@ -50,9 +50,10 @@ class Iframe {
    * @return array with output
    */ 
 
-  public function iframe( $str, array $argv, Parser $parser, PPFrame $frame ) {
+  public static function renderIframe( $str, array $argv, Parser $parser, PPFrame $frame ) {
+    global $wgIframe;
     # partial matching of parameters if necessary
-    $params = array('width', 'height', 'path', 'level');
+    $params = array('width', 'height', 'path', 'level', 'key');
     foreach ($argv as $key => $value) {
       $parr = array();
       foreach($params as $param) {
@@ -61,31 +62,23 @@ class Iframe {
       if (count($parr)==1) $argv[array_pop($parr)] = $value;
     }
     # get parameters
-    $width  = (array_key_exists('width',  $args) ? $args['width']  : 800);      
-    $height = (array_key_exists('height', $args) ? $args['height'] : 600); 
-    $key    = (array_key_exists('path',   $args) ? $args['path']   : 'local'); 
-    $phost  = (array_key_exists('level',  $args) ? $args['level']  : ''); 
+    $width  = (array_key_exists('width',  $argv) ? $argv['width']  : 800);      
+    $height = (array_key_exists('height', $argv) ? $argv['height'] : 600); 
+    $key    = (array_key_exists('key',    $argv) ? $argv['key']    : 'local'); 
+    $phost  = (array_key_exists('level',  $argv) ? $argv['level']  : ''); 
     if (!empty($phost)) $phost .= '.';
     #
-    $page   = (array_key_exists('p',  $args) ? $args['p']  : ''); 
+    $page   = (array_key_exists('path',  $argv) ? $argv['path']  : ''); 
     $url    = $wgIframe[$key]['scheme'] . '://' . $phost .  $wgIframe[$key]['domain'] . '/';
     $page   = parse_url ($page);
-    if (empty($url)) {
-      $output = '<table width="'. $width .'"><tr align="left"><th>Possible key(s)</th><th>URL(s)</th></tr>';
-      foreach ($wgIframeUrl as $key => $value) {
-        $output .= '<tr><td>' . htmlentities($key) . '</td><td>' . htmlentities($value) . '</td></tr>';
-      }
-      $output .= '</table>';
-    } else {
-      $furl = $url . $page['path'];
-      if (array_key_exists('query', $page)) {
-        parse_str($page['query'], $queries);
-        $qarr = array();
-        foreach ($queries as $key => $value) array_push($qarr, htmlentities($key) . '=' . htmlentities($value));
-        $furl .= '?' . implode('&', $qarr);
-      }
-      $output = '<iframe src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
+    $furl   = $url . $page['path'];
+    if (array_key_exists('query', $page)) {
+      parse_str($page['query'], $queries);
+      $qarr = array();
+      foreach ($queries as $key => $value) array_push($qarr, htmlentities($key) . '=' . htmlentities($value));
+      $furl .= '?' . implode('&', $qarr);
     }
+    $output = '<iframe src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     return array( $output, 'noparse' => true, 'isHTML' => true );	 
   } 
 
