@@ -9,7 +9,7 @@
 	"manifest_version": 1,
 
         "AutoloadClasses": { "Iframe": "Iframe_body.php" },
-	"MessagesDirs": {"Iframe": "i18n" }
+	"MessagesDirs": {"Iframe": "i18n" },
         "Hooks": { "ParserFirstCallInit": "Iframe::setHooks"}
 }
 
