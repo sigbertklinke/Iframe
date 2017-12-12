@@ -18,6 +18,27 @@ limitations under the License.
 
 class Iframe {
 
+  public static $params = array('height' => 'height', 'key'   => 'key', 
+                                'level'  => 'level',  'path'  => 'path', 
+                                'size'   => 'size',   'width' => 'width');
+
+  public static function onRegistration() {
+    global $wgIframe, $wgExtensionDirectory;
+    $wgIframe = array('server' => array(), 'size' => array());
+    if (($handle = fopen("$wgExtensionDirectory/Iframe/sizes.csv", 'r')) !==FALSE) {
+      while (($data = fgetcsv($handle)) !== FALSE) {
+        $wgIframe['size'][$data[0]] = array('width' => $data[1], 'height' => $data[2]);
+      }
+      fclose($handle);
+    }
+    if (($handle = fopen("$wgExtensionDirectory/Iframe/servers.csv", 'r')) !==FALSE) {
+      while (($data = fgetcsv($handle)) !== FALSE) {
+        $wgIframe['server'][$data[0]] = array('scheme' => $data[1], 'domain' => $data[2]);
+      }
+      fclose($handle);
+    }
+  }
+  
   /**
    * Initialize the parser hooks
    *
@@ -26,17 +47,6 @@ class Iframe {
    * @return bool
    */
   public static function setHooks( Parser $parser ) {
-    global $wgIframe;
-    $wgIframe = array ('local'      => array('scheme' =>'http',  'domain' => 'localhost'),
-                       'locals'     => array('scheme' =>'https', 'domain' => 'localhost'),
-                       'shiny'      => array('scheme' =>'http',  'domain' => 'localhost:3838'),
-                       'shinys'     => array('scheme' =>'https', 'domain' => 'localhost:3838'),
-                       'rstudio'    => array('scheme' =>'http',  'domain' => 'shiny.rstudio.com'),
-                       'shinyapps'  => array('scheme' =>'http',  'domain' => 'shinyapps.io'),
-                       'mars'       => array('scheme' =>'http',  'domain' => 'mars.wiwi.hu-berlin.de:3838'),
-                       'wiwi'       => array('scheme' =>'https', 'domain' => 'shinyapps.wiwi.hu-berlin.de')
-                       );
- #   $parser->extIframe = new self();
     $parser->setHook( 'iframe', 'Iframe::renderIframe' );
     return true;
   }
@@ -52,26 +62,42 @@ class Iframe {
    * @return array with output
    */ 
 
+  public static function match($str, $arr, $partial = true) {
+    $karr = array();
+    $lstr = strtolower($str);
+    foreach ($arr as $key => $value) {
+      $cmpstr = strtolower($partial ? substr($key, 0, strlen($lstr)) : $key);
+      if ($cmpstr === $lstr) array_push($karr, $value);
+    }
+    return($karr);
+  }
+
   public static function renderIframe( $str, array $argv, Parser $parser, PPFrame $frame ) {
     global $wgIframe;
     # partial matching of parameters if necessary
-    $params = array('width', 'height', 'path', 'level', 'key');
     foreach ($argv as $key => $value) {
-      $parr = array();
-      foreach($params as $param) {
-        if (substr($param, 0, strlen($key)) === $key) array_push($parr, $param);
-      }
-      if (count($parr)==1) $argv[array_pop($parr)] = $value;
+      $karr = self::match($key, self::$params);
+      if (count($karr)==1) $argv[array_pop($karr)] = $value;
     }
     # get parameters
-    $width  = (array_key_exists('width',  $argv) ? $argv['width']  : 800);      
-    $height = (array_key_exists('height', $argv) ? $argv['height'] : 600); 
+    $width  = 800;
+    $height = 600;
+    if (array_key_exists('size', $argv)) {
+      $karr   = self::match($argv['size'], $wgIframe['size'], FALSE);
+      if (count($karr)==1) {
+        $karr   = array_pop($karr);
+        $width  = intval($karr['width']);
+        $height = intval($karr['height']);
+      }
+    }
+    $width  = (array_key_exists('width',  $argv) ? $argv['width']  : $width);      
+    $height = (array_key_exists('height', $argv) ? $argv['height'] : $height); 
     $key    = (array_key_exists('key',    $argv) ? $argv['key']    : 'local'); 
     $phost  = (array_key_exists('level',  $argv) ? $argv['level']  : ''); 
     if (!empty($phost)) $phost .= '.';
     #
     $page   = (array_key_exists('path',  $argv) ? $argv['path']  : ''); 
-    $url    = $wgIframe[$key]['scheme'] . '://' . $phost .  $wgIframe[$key]['domain'] . '/';
+    $url    = $wgIframe['server'][$key]['scheme'] . '://' . $phost .  $wgIframe['server'][$key]['domain'] . '/';
     $page   = parse_url ($page);
     $furl   = $url . $page['path'];
     if (array_key_exists('query', $page)) {
@@ -83,7 +109,6 @@ class Iframe {
     $output = '<iframe src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     return array( $output, 'noparse' => true, 'isHTML' => true );	 
   } 
-
 }
 
 ?>

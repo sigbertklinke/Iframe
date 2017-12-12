@@ -1,0 +1,8 @@
+local,http,localhost
+locals,https,localhost
+shiny,http,localhost:3838
+shinys,https,localhost:3838
+rstudio,http,shiny.rstudio.com
+shinyapps,http,shinyapps.io
+mars,http,mars.wiwi.hu-berlin.de:3838
+wiwi,https,shinyapps.wiwi.hu-berlin.de

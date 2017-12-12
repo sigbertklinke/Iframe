@@ -3,13 +3,15 @@
 	"author": "Sigbert Klinke",
 	"url": "https://www.mediawiki.org/wiki/Extension:Iframe",
 	"description": "This extension creates an iframe to embed an external webpage",
-	"version": "0.03",
+	"version": "0.04",
 	"license-name": "GPL-2.0+",
 	"type": "other",
 	"manifest_version": 1,
 
         "AutoloadClasses": { "Iframe": "Iframe_body.php" },
 	"MessagesDirs": {"Iframe": "i18n" },
-        "Hooks": { "ParserFirstCallInit": "Iframe::setHooks"}
+        "Hooks": { "ParserFirstCallInit": "Iframe::setHooks"},
+
+        "callback": "Iframe::onRegistration"
 }
 
