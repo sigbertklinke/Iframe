@@ -22,23 +22,6 @@ class Iframe {
                                 'level'  => 'level',  'path'  => 'path', 
                                 'size'   => 'size',   'width' => 'width');
 
-  public static function onRegistration() {
-    global $wgIframe, $wgExtensionDirectory;
-    $wgIframe = array('server' => array(), 'size' => array());
-    if (($handle = fopen("$wgExtensionDirectory/Iframe/sizes.csv", 'r')) !==FALSE) {
-      while (($data = fgetcsv($handle)) !== FALSE) {
-        $wgIframe['size'][$data[0]] = array('width' => $data[1], 'height' => $data[2]);
-      }
-      fclose($handle);
-    }
-    if (($handle = fopen("$wgExtensionDirectory/Iframe/servers.csv", 'r')) !==FALSE) {
-      while (($data = fgetcsv($handle)) !== FALSE) {
-        $wgIframe['server'][$data[0]] = array('scheme' => $data[1], 'domain' => $data[2]);
-      }
-      fclose($handle);
-    }
-  }
-  
   /**
    * Initialize the parser hooks
    *
@@ -74,6 +57,12 @@ class Iframe {
 
   public static function renderIframe( $str, array $argv, Parser $parser, PPFrame $frame ) {
     global $wgIframe;
+    if (!property_exists($parser, 'Iframe')) {
+     $parser->Iframe = array('no' => 1);
+    } else {
+      $parser->Iframe['no']++;
+    } 
+    $parser->mOutput->addModules('ext.Iframe');
     # partial matching of parameters if necessary
     foreach ($argv as $key => $value) {
       $karr = self::match($key, self::$params);
@@ -106,7 +95,13 @@ class Iframe {
       foreach ($queries as $key => $value) array_push($qarr, htmlentities($key) . '=' . htmlentities($value));
       $furl .= '?' . implode('&', $qarr);
     }
-    $output = '<iframe src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
+    $id = 'Iframe' . $parser->Iframe['no'];
+    if ($wgIframe['delay']<0) {
+      $output = '<iframe id="' . $id . '" src="' . $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
+    } else {
+      $output = '<iframe id="' . $id . '" data-src="' . $furl . '" data-delay="' . $wgIframe['delay'] . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
+    }
+#    $output = '<iframe id="' . $id . '" src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     return array( $output, 'noparse' => true, 'isHTML' => true );	 
   } 
 }
