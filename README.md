@@ -23,4 +23,4 @@ The parameters `w`and `h` are optional. The final URL is `http://shiny.rstudio.c
 
 The extension is potentially a security reason, since an external web page may contain malicious code.
 
-The software is usable under the Apache License, Version 2.0, for details see [LICENSE](LICENSE).
+The software is usable under the GNU General Public License, Version 3.0, for details see [LICENSE](LICENSE).
