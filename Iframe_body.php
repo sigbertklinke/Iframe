@@ -22,7 +22,116 @@ class Iframe {
                                 'level'  => 'level',  'path'  => 'path', 
                                 'size'   => 'size',   'width' => 'width');
 
-  /**
+  public static function onRegistration() {
+    global $wgIframe;
+    $config = array(
+               "delay"    => 50,
+               "width"    => 800,
+               "height"   => 600,
+               "category" => "Iframe",
+	       "server"   => array(
+                 "local"     => array("scheme" => "http",  "domain" => "localhost"),
+                 "locals"    => array("scheme" => "https",   "domain" => "localhost"),
+                 "shiny"     => array("scheme" => "http",    "domain" => "localhost:3838"),
+                 "shinys"    => array("scheme" => "https",   "domain" => "localhost:3838"),
+                 "rstudio"   => array("scheme" => "http",    "domain" => "shiny.rstudio.com"),
+                 "shinyapps" => array("scheme" => "http",    "domain" => "shinyapps.io"),
+                 "mars"      => array("scheme" => "http",    "domain" => "mars.wiwi.hu-berlin.de"),
+                 "wiwi"      => array("scheme" => "https",   "domain" => "shinyapps.wiwi.hu-berlin.de")
+                 ),
+               "size" => array(
+                 "QQVGA"   => array(   160,   120),
+	         "HQVGA"   => array(   240,   160),
+	         "QVGA"    => array(   320,   240),
+	         "WQVGA"   => array(   400,   240),
+	         "HVGA"    => array(   480,   320),
+	         "nHD"     => array(   640,   360),
+	         "WVGA_1"  => array(   640,   360),
+	         "WVGA_2"  => array(   640,   384),
+	         "SD"      => array(   640,   480),
+	         "VGA"     => array(   640,   480),
+	         "WVGA_3"  => array(   720,   480),
+	         "WGA"     => array(   768,   480),
+	         "WVGA"    => array(   768,   480),
+	         "WVGA_5"  => array(   768,   480),
+	         "WVGA_4"  => array(   800,   450),
+	         "WVGA_6"  => array(   800,   480),
+	         "SVGA"    => array(   800,   600),
+	         "WVGA_7"  => array(   848,   480),
+	         "FWVGA"   => array(   854,   480),
+	         "DVGA"    => array(   960,   480),
+	         "qHD"     => array(   960,   540),
+	         "WSVGA_5" => array(  1024,   576),
+	         "WSVGA"   => array(  1024,   600),
+	         "WSVGA_6" => array(  1024,   600),
+	         "XGA"     => array(  1024,   768),
+	         "WXGA_1"  => array(  1152,   768),
+	         "XGA+_1"  => array(  1152,   832),
+	         "XGA+"    => array(  1152,   864),
+	         "XGA+_2"  => array(  1152,   864),
+	         "XGA+_3"  => array(  1152,   870),
+	         "XGA+_4"  => array(  1152,   900),
+	         "HD"      => array(  1280,   720),
+	         "WXGA_2"  => array(  1280,   720),
+	         "WXGA_3"  => array(  1280,   768),
+	         "WXGA_4"  => array(  1280,   800),
+	         "SXGA"    => array(  1280,  1024),
+	         "WXGA_5"  => array(  1344,   768),
+	         "WXGA_6"  => array(  1360,   768),
+	         "WXGA"    => array(  1366,   768),
+	         "WXGA_7"  => array(  1366,   768),
+	         "SXGA+"   => array(  1400,  1050),
+	         "WSXGA"   => array(  1440,   900),
+	         "WXGA+"   => array(  1440,   900),
+	         "HD+"     => array(  1600,   900),
+	         "UXGA"    => array(  1600,  1200),
+	         "WSXGA+"  => array(  1680,  1050),
+	         "FHD"     => array(  1920,  1080),
+	         "WUXGA"   => array(  1920,  1200),
+	         "DCI2K"   => array(  2048,  1080),
+	         "QWXGA"   => array(  2048,  1152),
+	         "QXGA"    => array(  2048,  1536),
+	         "FHD+"    => array(  2160,  1440),
+	         "1440p"   => array(  2560,  1440),
+	         "WQHD"    => array(  2560,  1440),
+	         "WQXGA"   => array(  2560,  1600),
+	         "QSXGA"   => array(  2560,  2048),
+	         "QHD+"    => array(  3200,  1800),
+	         "WQXGA+"  => array(  3200,  1800),
+	         "WQSXGA"  => array(  3200,  2048),
+	         "QUXGA"   => array(  3200,  2400),
+	         "UWQHD"   => array(  3440,  1440),
+	         "UW4K"    => array(  3840,  1600),
+	         "4KUHD"   => array(  3840,  2160),
+	         "UHDTV-1" => array(  3840,  2160),
+	         "WQUXGA"  => array(  3840,  2400),
+	         "HXGA"    => array(  4093,  3072),
+	         "Cinema4K"=> array(  4096,  2160),
+	         "DCI4K"   => array(  4096,  2160),
+	         "UW5K"    => array(  5120,  2160),
+	         "5K"      => array(  5120,  2880),
+	         "UHD+"    => array(  5120,  2880),
+	         "WHXGA"   => array(  5120,  3200),
+	         "HSXGA"   => array(  5120,  4096),
+	         "HUXGA"   => array(  6400,  4800),
+	         "8KUHD"   => array(  7680,  4320),
+	         "UHDTV-2" => array(  7680,  4320),
+	         "WHUXGA"  => array(  7680,  4800),
+	         "10KUHD"  => array( 10240,  4320)
+               )
+             );
+    foreach ($config as $key => $value) {
+      if (array_key_exists($key, $wgIframe)) {
+        if (is_array($config[$key])) {
+          $wgIframe[$key] = array_merge($config[$key], $wgIframe[$key]);
+        } 
+      } else {
+        $wgIframe[$key] = $config[$key];
+      }
+    }
+  }
+
+/**
    * Initialize the parser hooks
    *
    * @param Parser $parser
@@ -57,8 +166,9 @@ class Iframe {
 
   public static function renderIframe( $str, array $argv, Parser $parser, PPFrame $frame ) {
     global $wgIframe;
+#    var_dump($wgIframe['server']);
     if (!property_exists($parser, 'Iframe')) {
-     $parser->Iframe = array('no' => 1);
+      $parser->Iframe = array('no' => 1);
     } else {
       $parser->Iframe['no']++;
     } 
@@ -68,15 +178,13 @@ class Iframe {
       $karr = self::match($key, self::$params);
       if (count($karr)==1) $argv[array_pop($karr)] = $value;
     }
-    # get parameters
-    $width  = 800;
-    $height = 600;
+    # set parameters
+    $width  = $wgIframe['width'];
+    $height = $wgIframe['height'];
     if (array_key_exists('size', $argv)) {
-      $karr   = self::match($argv['size'], $wgIframe['size'], FALSE);
-      if (count($karr)==1) {
-        $karr   = array_pop($karr);
-        $width  = intval($karr['width']);
-        $height = intval($karr['height']);
+      if (array_key_exists($argv['size'], $wgIframe['size'])) {
+        $width  = $wgIframe['size'][$argv['size']][0];
+        $height = $wgIframe['size'][$argv['size']][1];
       }
     }
     $width  = (array_key_exists('width',  $argv) ? $argv['width']  : $width);      
@@ -100,6 +208,16 @@ class Iframe {
       $output = '<iframe id="' . $id . '" src="' . $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     } else {
       $output = '<iframe id="' . $id . '" data-src="' . $furl . '" data-delay="' . $wgIframe['delay'] . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
+    }
+    if (array_key_exists('category', $wgIframe)) {
+      var_dump($wgIframe['category']);
+      if (is_array($wgIframe['category'])) {
+        foreach ($wgIframe['category'] as $value) {
+          $output .= $parser->recursiveTagParse(sprintf('[[Category:%s]]', $value), $frame);
+	}
+      } else {
+        $output .= $parser->recursiveTagParse(sprintf("[[Category:%s]]", $wgIframe['category']), $frame);
+      }
     }
 #    $output = '<iframe id="' . $id . '" src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     return array( $output, 'noparse' => true, 'isHTML' => true );	 

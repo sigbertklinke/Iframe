@@ -10,14 +10,10 @@ The parameters `w`and `h` are optional. The final URL is `http://shiny.rstudio.c
 
 # Installation
 
-* Create a subfolder `iframe` in the extensions directory of your MediaWiki installation.
-* Install `iframe.php` in the subfolder
-* Edit your `LocalSettings.php` and add at the end `include("$IP/extensions/iframe/iframe.php");`
-* The hash `$wgIframeUrl` in `iframe.php` controls which web addresses can be used 
-
-# Files
-
-    iframe.php       PHP-Skript
+* Go to the extensions directory of your MediaWiki installation.
+* Clone the extension from github by `git clone https://github.com/sigbertklinke/Iframe`
+* Edit your `LocalSettings.php` and add at the end `wfLoadExtension( 'Iframe' );`
+* The global variable `$wgIframe` controls which defaults are used (web address, sizes etc.)  
 
 # Note
 
