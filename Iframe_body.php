@@ -210,7 +210,7 @@ class Iframe {
       $output = '<iframe id="' . $id . '" data-src="' . $furl . '" data-delay="' . $wgIframe['delay'] . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     }
     if (array_key_exists('category', $wgIframe)) {
-      var_dump($wgIframe['category']);
+      #var_dump($wgIframe['category']);
       if (is_array($wgIframe['category'])) {
         foreach ($wgIframe['category'] as $value) {
           $output .= $parser->recursiveTagParse(sprintf('[[Category:%s]]', $value), $frame);
