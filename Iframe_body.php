@@ -25,6 +25,14 @@ class Iframe {
   public static function onRegistration() {
     global $wgIframe;
     $config = array(
+               "description" => array(
+	         "delay"    => "Determines when and how fast iframes are loaded (in ms)",
+		 "width"    => "Determines the default width of an iframe (in pixel)",
+		 "height"   => "Determines the default height of an iframe (in pixel)",
+		 "category" => "Determines if and which category page is used by the extension",
+		 "server"   => "Determines which servers can be used.<br>A URL is composed by <i>key-scheme://level.key-domain/path</i>",
+		 "size"     => "Predefined sizes (in pixel) for iframes<br>Note: Names are case-sensitive!"
+		 ),
                "delay"    => 50,
                "width"    => 800,
                "height"   => 600,
