@@ -1,12 +1,12 @@
 # Purpose
 
-The extension allows in a MediWiki the embedding of foreign web pages via an `iframe`. 
+The extension allows in a MediWiki the embedding of foreign web pages via an `iframe`.
 
 # Usage
 
 `<iframe k="rstudio" p="page" w="800" h="600" />`
 
-The parameters `w`and `h` are optional. The final URL is `http://shiny.rstudio.com/page`, composed of the value in `$wgIframeUrl` for the key `rstudio` and `p`.
+The parameters `w`, `h` and `allowfullscreen` are optional. The final URL is `http://shiny.rstudio.com/page`, composed of the value in `$wgIframeUrl` for the key `rstudio` and `p`.
 
 # Installation
 
