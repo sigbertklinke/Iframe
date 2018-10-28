@@ -12,12 +12,13 @@
 			      "SpecialIframe": "SpecialIframe_body.php" },
     	"SpecialPages"    : { "Iframe": "SpecialIframe" },
 	"MessagesDirs"    : { "Iframe": "i18n" },
-        "Hooks"           : { "ParserFirstCallInit": "Iframe::setHooks" },
+        "Hooks"           : { "ParserFirstCallInit": "Iframe::setHooks"},
 
         "callback": "Iframe::onRegistration",
 
         "ResourceModules" : {
           "ext.Iframe" : {
+            "targets": [ "desktop", "mobile" ],
             "scripts": 
                [ "ext.Iframe.js" ]
           }
