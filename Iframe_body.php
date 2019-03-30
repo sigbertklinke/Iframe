@@ -49,7 +49,7 @@ class Iframe {
             "shinyapps" => array("scheme" => "http",    "domain" => "shinyapps.io"),
             "mars"      => array("scheme" => "http",    "domain" => "mars.wiwi.hu-berlin.de"),
             "wiwi"      => array("scheme" => "https",   "domain" => "shinyapps.wiwi.hu-berlin.de"),
-            "hubox"     => array("scheme" => "https",   "domain" => "box.hu-berlin.de"),
+            "hubox"     => array("scheme" => "https",   "domain" => "box.hu-berlin.de")
         ),
         "size" => array(
             "QQVGA"   => array(   160,   120),
