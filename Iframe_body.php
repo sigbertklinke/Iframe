@@ -218,6 +218,9 @@ class Iframe {
       foreach ($queries as $key => $value) array_push($qarr, htmlentities($key) . '=' . htmlentities($value));
       $furl .= '?' . implode('&', $qarr);
     }
+    if (array_key_exists('fragment', $page)) {
+      $furl .= '#' . htmlentities($page['fragment']);
+    }
     $id = 'Iframe' . $parser->Iframe['no'];
     if ($wgIframe['delay']<0) {
       $output = '<iframe id="' . $id . '" src="' . $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0" '. $allowfullscreen .' ></iframe>';
