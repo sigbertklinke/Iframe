@@ -132,15 +132,18 @@ class Iframe {
             "10KUHD"  => array( 10240,  4320)
         )
     );
+#    echo "<pre> start";
     foreach ($config as $key => $value) {
-      if (array_key_exists($key, $wgIframe)) {
-        if (is_array($config[$key])) {
+#var_dump($key);      
+	    if (array_key_exists($key, $wgIframe)) {
+	if (is_array($config[$key])) {
           $wgIframe[$key] = array_merge($config[$key], $wgIframe[$key]);
         }
       } else {
-        $wgIframe[$key] = $config[$key];
+	$wgIframe[$key] = $config[$key];
       }
     }
+#    echo "End</pre>";
   }
 
 /**
@@ -177,20 +180,26 @@ class Iframe {
   }
 
   public static function renderIframe( $str, array $argv, Parser $parser, PPFrame $frame ) {
-    global $wgIframe;
-#    var_dump($wgIframe['server']);
+    global $wgIframe;  
+ #   var_dump("render");	  
     if (!property_exists($parser, 'Iframe')) {
       $parser->Iframe = array('no' => 1);
     } else {
       $parser->Iframe['no']++;
     }
-    $parser->mOutput->addModules('ext.Iframe');
+#    var_dump("match param");
+    #$parser->mOutput->addModules('ext.Iframe');
+    $parser->getOutput()->addModules( 'ext.Iframe' );
     # partial matching of parameters if necessary
+#    var_dump("argv");
     foreach ($argv as $key => $value) {
+#var_dump($key);	   
       $karr = self::match($key, self::$params);
       if (count($karr)==1) $argv[array_pop($karr)] = $value;
     }
+#    var_dump("set param");
     # set parameters
+#    var_dump($wgIframe);
     $width  = $wgIframe['width'];
     $height = $wgIframe['height'];
     if (array_key_exists('size', $argv)) {
@@ -237,6 +246,7 @@ class Iframe {
         $output .= $parser->recursiveTagParse(sprintf("[[Category:%s]]", $wgIframe['category']), $frame);
       }
     }
+#    var_dump("end of render");
 #    $output = '<iframe id="' . $id . '" src="'. $furl . '" width="'. $width .'" height="'. $height .'" frameborder="0"></iframe>';
     return array( $output, 'noparse' => true, 'isHTML' => true );
   }

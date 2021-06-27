@@ -20,3 +20,7 @@ The parameters `w`, `h` and `allowfullscreen` are optional. The final URL is `ht
 The extension is potentially a security reason, since an external web page may contain malicious code.
 
 The software is usable under the GNU General Public License, Version 3.0, for details see [LICENSE](LICENSE).
+
+# History
+
+2021-06-27 Adapted to MediaWiki 1.36.1, v 0.09

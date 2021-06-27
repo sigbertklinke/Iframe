@@ -3,7 +3,7 @@
 	"author"          : "Sigbert Klinke",
 	"url"             : "https://www.mediawiki.org/wiki/Extension:Iframe",
 	"description"     : "This extension creates an iframe to embed an external webpage",
-	"version"         : "0.08",
+	"version"         : "0.09",
 	"license-name"    : "GPL-2.0+",
 	"type"            : "other",
 	"manifest_version": 1,
@@ -18,14 +18,12 @@
 
         "ResourceModules" : {
           "ext.Iframe" : {
-            "targets": [ "desktop", "mobile" ],
-            "scripts": 
-               [ "ext.Iframe.js" ]
+            "packageFiles": [ "resources/ext.Iframe.js" ]
           }
         },
-        "ResourceFileModulePaths": {
-          "localBasePath" : "modules",
-          "remoteExtPath" : "Iframe/modules"
+	"ResourceFileModulePaths": {
+          "localBasePath" : "",
+          "remoteExtPath" : "Iframe/resources"
         }
 }
 
