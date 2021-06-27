@@ -25,6 +25,6 @@ class SpecialIframe extends SpecialPage {
                 }
                 $wikitext .= "\n|}";
 
-		$output->addWikiText( $wikitext );
+		$output->addWikiTextAsInterface( $wikitext );
 	}
 }
