@@ -23,4 +23,5 @@ The software is usable under the GNU General Public License, Version 3.0, for de
 
 # History
 
-2021-06-27 Adapted to MediaWiki 1.36.1, v 0.09
+* 2022-10-09 Modified JS resources code, v 0.10
+* 2021-06-27 Adapted to MediaWiki 1.36.1, v 0.09
