@@ -189,7 +189,7 @@ class Iframe {
     }
 #    var_dump("match param");
     #$parser->mOutput->addModules('ext.Iframe');
-    $parser->getOutput()->addModules( 'ext.Iframe' );
+    $parser->getOutput()->addModules( array('ext.Iframe') );
     # partial matching of parameters if necessary
 #    var_dump("argv");
     foreach ($argv as $key => $value) {
